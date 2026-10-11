@@ -79,14 +79,14 @@
             z-index: 10;
         }
 
-        /* Overlay Loading Senada dengan Landing Page & Efek Keren */
+        /* Overlay Loading Berlatar Belakang Landing Page Tanpa Kalimat */
         #loadingOverlay {
             position: absolute;
             inset: 0;
             z-index: 20;
-            background: rgba(2, 6, 23, 0.82);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
+            background-color: rgba(2, 6, 23, 0.65);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -94,28 +94,27 @@
             transition: opacity 0.4s ease;
         }
 
-        /* Spinner Futuristik Keren */
+        /* Spinner Futuristik Keren Tanpa Teks */
         .spinner-container {
             position: relative;
             width: 64px;
             height: 64px;
-            margin-bottom: 16px;
         }
         .spinner-ring {
             position: absolute;
             inset: 0;
-            border: 3px solid rgba(99, 102, 241, 0.15);
+            border: 3px solid rgba(99, 102, 241, 0.2);
             border-top-color: #6366f1;
             border-radius: 50%;
-            animation: spin 1s cubic-bezier(0.68, -0.55, 0.265, 1.55) infinite;
+            animation: spin 0.9s cubic-bezier(0.68, -0.55, 0.265, 1.55) infinite;
         }
         .spinner-ring-inner {
             position: absolute;
             inset: 8px;
-            border: 3px solid rgba(16, 185, 129, 0.15);
+            border: 3px solid rgba(16, 185, 129, 0.2);
             border-bottom-color: #10b981;
             border-radius: 50%;
-            animation: spin-reverse 0.8s linear infinite;
+            animation: spin-reverse 0.7s linear infinite;
         }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         @keyframes spin-reverse { 0% { transform: rotate(360deg); } 100% { transform: rotate(0deg); } }
@@ -186,16 +185,14 @@
         </div>
     </div>
 
-    <!-- AREA APLIKASI (Iframe + Overlay Loading Keren Berlatar Belakang Landing Page) -->
+    <!-- AREA APLIKASI (Iframe + Spinner Loading Tanpa Kalimat) -->
     <div id="layarAplikasi">
         <div id="loadingOverlay">
-            <div class="glass-panel p-6 rounded-3xl flex flex-col items-center shadow-2xl border border-white/10">
+            <div class="glass-panel p-5 rounded-full flex items-center justify-center shadow-2xl border border-white/10">
                 <div class="spinner-container">
                     <div class="spinner-ring"></div>
                     <div class="spinner-ring-inner"></div>
                 </div>
-                <span class="text-xs font-bold text-slate-200 tracking-wider uppercase mt-2">MEMUAT LAYANAN</span>
-                <span class="text-[10px] text-indigo-400 font-medium mt-0.5">Mohon tunggu sebentar...</span>
             </div>
         </div>
         <div id="iframeWrapper"></div>
