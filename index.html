@@ -160,7 +160,6 @@
 
     <!-- AREA APLIKASI (Iframe) -->
     <div id="layarAplikasi" class="hidden fixed inset-0 z-40 w-full h-full bg-transparent">
-        
         <!-- LAYER SPINNER LOADING -->
         <div id="loadingOverlay" class="absolute inset-0 z-50 flex items-center justify-center bg-[#020617]/70 backdrop-blur-md transition-opacity duration-700 opacity-100">
             <div class="glass-panel p-6 rounded-full flex items-center justify-center shadow-[0_0_40px_rgba(99,102,241,0.15)] border border-white/10 transform scale-110">
@@ -180,6 +179,24 @@
             'gedung': 'https://script.google.com/macros/s/AKfycbwssleg1KigvT6ospk6LVwpea_78W2OuInzvV7GzbNmO9RfaanhQMo2wECICG8Mx8Dv/exec'
         };
 
+        // KUNCI SOLUSI IPHONE: Fungsi deteksi perangkat pintar
+        function bukaLayanan(idLayanan) {
+            if (!daftarAplikasi[idLayanan]) return;
+
+            // Cek apakah perangkat adalah iPhone/iPad (iOS)
+            const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+
+            // Jika pengguna pakai iPhone DAN membuka Log Pergerakan (yang butuh izin lokasi GPS)
+            if (isIOS && idLayanan === 'pergerakan') {
+                // Lewati iframe dan langsung redirect ke link asli agar GPS tidak di-blokir Apple
+                window.location.href = daftarAplikasi[idLayanan];
+                return;
+            }
+
+            // Untuk Android, PC, atau buka Log Gedung: Lanjut menggunakan animasi Iframe portal
+            window.location.hash = idLayanan; 
+        }
+
         function tanganiNavigasi() {
             const idLayanan = window.location.hash.substring(1); 
             const layarAplikasi = document.getElementById('layarAplikasi');
@@ -188,11 +205,9 @@
             const loadingOverlay = document.getElementById('loadingOverlay');
             
             if (daftarAplikasi[idLayanan]) {
-                // Tampilkan container aplikasi dan sembunyikan menu
                 halamanMenu.classList.add('hidden');
                 layarAplikasi.classList.remove('hidden');
                 
-                // Pastikan loading muncul saat perpindahan
                 loadingOverlay.classList.remove('opacity-0', 'pointer-events-none');
                 loadingOverlay.classList.add('opacity-100', 'pointer-events-auto');
                 
@@ -206,14 +221,10 @@
                     iframe.style.border = 'none';
                     iframe.style.background = 'transparent';
                     
-                    // Delay sejenak agar iframe.onload tidak terpicu oleh proses build elemen (about:blank)
                     setTimeout(() => {
                         iframe.onload = function() {
-                            // Sembunyikan loading dengan transisi halus
                             loadingOverlay.classList.remove('opacity-100');
                             loadingOverlay.classList.add('opacity-0');
-                            
-                            // Matikan klik pada overlay setelah memudar
                             setTimeout(() => {
                                 loadingOverlay.classList.remove('pointer-events-auto');
                                 loadingOverlay.classList.add('pointer-events-none');
@@ -225,7 +236,6 @@
                     wrapper.appendChild(iframe);
                     wrapper.dataset.current = idLayanan;
                 } else {
-                    // Jika iframe sudah pernah dimuat (kembali dari menu)
                     setTimeout(() => {
                         loadingOverlay.classList.remove('opacity-100');
                         loadingOverlay.classList.add('opacity-0');
@@ -236,15 +246,12 @@
                     }, 400);
                 }
             } else {
-                // Kembali ke Halaman Utama
                 layarAplikasi.classList.add('hidden');
                 halamanMenu.classList.remove('hidden');
                 
-                // Hancurkan iframe untuk memori
                 wrapper.innerHTML = '';
                 wrapper.dataset.current = '';
                 
-                // Bersihkan URL Hash
                 if (window.location.hash !== '') {
                     history.replaceState(null, null, window.location.pathname + window.location.search);
                 }
@@ -253,11 +260,6 @@
 
         window.addEventListener('hashchange', tanganiNavigasi);
         window.onload = function() { tanganiNavigasi(); };
-
-        function bukaLayanan(idLayanan) {
-            if (!daftarAplikasi[idLayanan]) return;
-            window.location.hash = idLayanan; 
-        }
     </script>
 </body>
 </html>
