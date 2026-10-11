@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Portal Sistem Informasi - PPI Curug</title>
+    <title>Portal Sistem Informasi - Politeknik Penerbangan Indonesia Curug</title>
     
     <!-- Preconnect untuk mempercepat render Iframe Google -->
     <link rel="preconnect" href="https://script.google.com">
@@ -18,11 +18,10 @@
             background-color: #020617;
             margin: 0; padding: 0;
             overflow: hidden;
-            touch-action: none;
             color: #f8fafc;
         }
 
-        /* Latar Belakang Asli Tanpa Blur */
+        /* Latar Belakang Asli */
         .bg-custom-overlay {
             position: fixed;
             top: 0; left: 0; width: 100vw; height: 100vh;
@@ -33,7 +32,7 @@
             background-repeat: no-repeat;
         }
 
-        /* Lapisan gelap transparan agar tombol & teks tetap terbaca elegan */
+        /* Lapisan gelap transparan */
         .bg-dark-overlay {
             position: fixed;
             top: 0; left: 0; width: 100vw; height: 100vh;
@@ -43,14 +42,14 @@
 
         /* Glassmorphism Premium */
         .glass-panel {
-            background: rgba(15, 23, 42, 0.5);
+            background: rgba(15, 23, 42, 0.65);
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
             border: 1px solid rgba(255, 255, 255, 0.1);
             box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
         }
 
-        /* Tombol Modern - Minimalist dengan Hover Halus */
+        /* Tombol Modern */
         .btn-modern {
             background: rgba(255, 255, 255, 0.03);
             border: 1px solid rgba(255, 255, 255, 0.05);
@@ -65,38 +64,41 @@
             transform: translateY(1px);
         }
 
-        /* Container Pembungkus Layar Penuh */
+        /* Container Layar Penuh */
         #layarAplikasi {
             display: none;
             width: 100vw; height: 100vh;
             position: fixed; top: 0; left: 0;
             z-index: 50;
-            background-color: #020617; /* Background gelap saat loading */
+            background-color: #020617;
         }
         
-        /* Wadah untuk menanam iframe */
         #iframeWrapper {
             width: 100%; height: 100%;
             position: relative;
             z-index: 10;
         }
 
-        /* Animasi Loading (Anti Blank Screen) */
-        #loadingSpinner {
+        /* Overlay Loading Senada dengan Landing Page */
+        #loadingOverlay {
             position: absolute;
-            top: 50%; left: 50%;
-            transform: translate(-50%, -50%);
-            z-index: 5;
+            inset: 0;
+            z-index: 20;
+            background: rgba(2, 6, 23, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
             display: flex;
             flex-direction: column;
             align-items: center;
+            justify-content: center;
+            transition: opacity 0.3s ease;
         }
         .spinner {
             border: 3px solid rgba(255, 255, 255, 0.1);
             border-left-color: #6366f1;
             border-radius: 50%;
-            width: 32px; height: 32px;
-            animation: spin 1s linear infinite;
+            width: 36px; height: 36px;
+            animation: spin 0.8s linear infinite;
             margin-bottom: 12px;
         }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
@@ -104,7 +106,6 @@
 </head>
 <body>
 
-    <!-- Background Asli -->
     <div class="bg-custom-overlay"></div>
     <div class="bg-dark-overlay"></div>
 
@@ -120,12 +121,12 @@
                 </div>
             </div>
 
-            <!-- Tipografi Modern -->
-            <h1 class="text-xl font-extrabold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-slate-100 to-slate-400 mb-1">
-                PORTAL DIGITAL
+            <!-- Tipografi Diperbarui -->
+            <h1 class="text-xl font-extrabold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-slate-100 to-slate-400 mb-1 text-center">
+                PORTAL DIGITAL TARUNA/I
             </h1>
-            <p class="text-[10px] font-semibold tracking-widest text-indigo-400/80 uppercase mb-8">
-                PPI Curug
+            <p class="text-[10px] font-semibold tracking-widest text-indigo-400/80 uppercase mb-8 text-center">
+                Politeknik Penerbangan Indonesia Curug
             </p>
 
             <div class="w-full space-y-3">
@@ -156,7 +157,7 @@
                     </div>
                     <div>
                         <span class="block text-sm font-bold text-slate-200 leading-tight">Log Peminjaman<br>Kendaraan</span>
-                        <span class="inline-block text-[9px] text-slate-800 bg-amber-400 font-bold px-1.5 py-0.5 rounded mt-1">SEGERA</span>
+                        <span class="inline-block text-[9px] text-slate-900 bg-amber-400 font-bold px-1.5 py-0.5 rounded mt-1">SEGERA</span>
                     </div>
                 </button>
             </div>
@@ -169,38 +170,34 @@
         </div>
     </div>
 
-    <!-- AREA APLIKASI (Tempat Iframe Ditanam) -->
+    <!-- AREA APLIKASI (Iframe + Overlay Loading) -->
     <div id="layarAplikasi">
-        
-        <!-- Animasi Loading saat Iframe sedang ditarik dari Google -->
-        <div id="loadingSpinner">
+        <div id="loadingOverlay">
             <div class="spinner"></div>
-            <span class="text-[10px] font-bold text-slate-400 tracking-widest">MEMUAT LAYANAN...</span>
+            <span class="text-[10px] font-bold text-slate-300 tracking-widest">MEMUAT LAYANAN...</span>
         </div>
-
-        <!-- Iframe akan di-generate otomatis oleh Javascript di dalam div ini -->
         <div id="iframeWrapper"></div>
     </div>
 
     <script>
-        // Database Link Layanan Anda
         const daftarAplikasi = {
             'pergerakan': 'https://script.google.com/macros/s/AKfycbwaWYSc7chUlWYVBRW15S5ULY2BsJNXafZBZFHSr9B2bdjwxkOVxKQE5vdBz9UK_WSl/exec',
             'gedung': 'https://script.google.com/macros/s/AKfycbwssleg1KigvT6ospk6LVwpea_78W2OuInzvV7GzbNmO9RfaanhQMo2wECICG8Mx8Dv/exec'
         };
 
-        // Fungsi Inti Navigasi Cerdas
         function tanganiNavigasi() {
             const idLayanan = window.location.hash.substring(1); 
             const layarAplikasi = document.getElementById('layarAplikasi');
             const halamanMenu = document.getElementById('halamanMenu');
             const wrapper = document.getElementById('iframeWrapper');
+            const loadingOverlay = document.getElementById('loadingOverlay');
             
             if (daftarAplikasi[idLayanan]) {
-                // Sembunyikan Menu
                 halamanMenu.style.display = 'none';
+                layarAplikasi.style.display = 'block';
+                loadingOverlay.style.opacity = '1';
+                loadingOverlay.style.pointerEvents = 'auto';
                 
-                // Jika aplikasi belum dimuat
                 if (wrapper.dataset.current !== idLayanan) {
                     wrapper.innerHTML = ''; 
                     
@@ -209,30 +206,31 @@
                     iframe.style.width = '100%';
                     iframe.style.height = '100%';
                     iframe.style.border = 'none';
-                    // Trik agar saat iframe selesai meload background putih dari Google, loadingnya tertutup otomatis
-                    iframe.style.position = 'relative'; 
-                    iframe.style.zIndex = '10';
+                    iframe.style.background = 'transparent';
+                    
+                    // Hilangkan overlay loading otomatis saat iframe selesai merender halaman
+                    iframe.onload = function() {
+                        loadingOverlay.style.opacity = '0';
+                        loadingOverlay.style.pointerEvents = 'none';
+                    };
                     
                     wrapper.appendChild(iframe);
-                    
-                    // Muat url
                     iframe.contentWindow.location.replace(daftarAplikasi[idLayanan]);
                     wrapper.dataset.current = idLayanan;
+                } else {
+                    // Jika iframe sudah ada di cache memori, langsung sembunyikan loading
+                    setTimeout(() => {
+                        loadingOverlay.style.opacity = '0';
+                        loadingOverlay.style.pointerEvents = 'none';
+                    }, 300);
                 }
-                
-                // Tampilkan Layar Aplikasi (Akan langsung menampilkan loading animasi selagi iframe me-render)
-                layarAplikasi.style.display = 'block';
-                
             } else {
-                // JIKA USER SWIPE BACK (KEMBALI KE MENU)
                 layarAplikasi.style.display = 'none';
                 halamanMenu.style.display = 'flex';
                 
-                // HANCURKAN Iframe 
                 wrapper.innerHTML = '';
                 wrapper.dataset.current = '';
                 
-                // Bersihkan histori URL HP agar bersih tanpa tanda '#'
                 if (window.location.hash !== '') {
                     history.replaceState(null, null, window.location.pathname + window.location.search);
                 }
