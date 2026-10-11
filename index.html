@@ -3,119 +3,247 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Portal Sistem Informasi - PPI Curug</title>
+    <title>Portal Taruna PPI Curug</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
     <style>
         body { 
-            font-family: 'Inter', sans-serif; 
-            background-color: #0e121e; 
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; 
+            background-color: #0b0f19; /* Latar belakang lebih dalam */
             margin: 0; padding: 0;
-            overflow: hidden; /* Mengunci scroll */
+            overflow: hidden; 
+            color: #f1f5f9;
+        }
+
+        /* Latar Belakang Animasi Pelan */
+        .bg-mesh {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100vw; height: 100vh;
+            background: radial-gradient(circle at 15% 50%, rgba(79, 70, 229, 0.15), transparent 25%),
+                        radial-gradient(circle at 85% 30%, rgba(56, 189, 248, 0.1), transparent 25%);
+            z-index: 0;
+        }
+
+        /* Glassmorphism Card */
+        .glass-card {
+            background: rgba(21, 26, 42, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Desain Tombol Layanan */
+        .menu-btn {
+            background: linear-gradient(145deg, rgba(30, 41, 59, 0.8), rgba(15, 23, 42, 0.9));
+            border: 1px solid rgba(100, 116, 139, 0.3);
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+        .menu-btn:hover {
+            transform: translateY(-2px);
+            border-color: rgba(99, 102, 241, 0.5);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 0 15px rgba(99, 102, 241, 0.2);
+        }
+        .menu-btn:active {
+            transform: translateY(1px);
         }
         
-        /* Container iframe (Awalnya tersembunyi) */
+        /* Ikon Lingkaran */
+        .icon-circle {
+            background: linear-gradient(135deg, rgba(79, 70, 229, 0.2), rgba(56, 189, 248, 0.1));
+            border: 1px solid rgba(99, 102, 241, 0.2);
+        }
+
+        /* iframe Area */
         #iframeContainer {
             display: none;
-            width: 100vw;
-            height: 100vh;
-            position: fixed;
-            top: 0; left: 0;
+            width: 100vw; height: 100vh;
+            position: fixed; top: 0; left: 0;
             z-index: 50;
+            background: #000;
         }
-        
         iframe {
-            width: 100%;
-            height: 100%;
+            width: 100%; height: 100%;
             border: none;
         }
 
-        /* Tombol Kembali ke Menu (Melayang di atas iframe) */
+        /* Tombol Kembali (Floating) */
         #btnKembaliMenu {
             display: none;
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
+            position: fixed; bottom: 24px; left: 50%;
+            transform: translateX(-50%);
             z-index: 100;
-            background-color: #ef4444; /* Warna Merah (Rose-500) */
-            color: white;
-            padding: 8px 16px;
+            background: rgba(15, 23, 42, 0.85);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(244, 63, 94, 0.4);
+            color: #f43f5e;
+            padding: 10px 24px;
             border-radius: 9999px;
-            font-size: 12px;
-            font-weight: bold;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-            border: 1px solid #7f1d1d;
+            font-size: 13px; font-weight: 700;
+            letter-spacing: 0.05em; text-transform: uppercase;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5);
             cursor: pointer;
+            transition: all 0.2s;
+            display: flex; align-items: center; gap: 8px;
+        }
+        #btnKembaliMenu:hover {
+            background: rgba(244, 63, 94, 0.1);
+            border-color: #f43f5e;
         }
     </style>
 </head>
-<body class="text-slate-200">
+<body>
+
+    <div class="bg-mesh"></div>
 
     <!-- HALAMAN MENU UTAMA -->
-    <div id="halamanMenu" class="min-h-screen flex flex-col items-center justify-center p-6 bg-[#0e121e] relative overflow-hidden">
-        <!-- Background Ornamen -->
-        <div class="absolute inset-0 z-0 opacity-20" style="background-image: url('https://lh3.googleusercontent.com/d/1I4uQ32h1LN7V1A7NMliGZmw2utljBUXj'); background-size: cover; background-position: center; filter: blur(4px);"></div>
+    <div id="halamanMenu" class="min-h-screen flex flex-col items-center justify-center p-4 sm:p-6 relative z-10 transition-opacity duration-300">
         
-        <div class="z-10 bg-[#181d30]/80 backdrop-blur-md border border-slate-700/60 p-8 rounded-3xl shadow-2xl w-full max-w-sm text-center">
-            <div class="w-16 h-16 mx-auto bg-indigo-500/20 border border-indigo-400/30 rounded-2xl flex items-center justify-center mb-4">
-                <img src="https://lh3.googleusercontent.com/d/1aC-xXpYi5bPon4N5biyockuXwTDcy8Pu" alt="Logo" class="h-10 w-auto">
+        <div class="glass-card p-6 sm:p-8 rounded-3xl w-full max-w-md flex flex-col items-center">
+            <!-- Logo Header -->
+            <div class="w-20 h-20 mb-5 relative group">
+                <div class="absolute inset-0 bg-indigo-500 rounded-full blur-md opacity-30 group-hover:opacity-50 transition-opacity"></div>
+                <div class="relative w-full h-full bg-[#111827] border border-indigo-500/40 rounded-full flex items-center justify-center">
+                    <img src="https://lh3.googleusercontent.com/d/1aC-xXpYi5bPon4N5biyockuXwTDcy8Pu" alt="Logo PPI" class="h-12 w-auto object-contain">
+                </div>
             </div>
-            <h1 class="text-lg font-bold text-white tracking-wide uppercase mb-1">Portal Digital</h1>
-            <p class="text-xs text-slate-400 mb-8">Politeknik Penerbangan Indonesia Curug</p>
+            
+            <h1 class="text-xl sm:text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-indigo-200 via-white to-sky-200 tracking-tight text-center mb-1">PORTAL DIGITAL</h1>
+            <p class="text-xs font-semibold text-indigo-300/70 tracking-widest uppercase mb-8 text-center">PPI Curug</p>
 
-            <div class="space-y-4">
-                <!-- Ganti link_gas_pergerakan dengan URL Web App Pergerakan Anda -->
-                <button onclick="bukaLayanan('https://script.google.com/macros/s/AKfycbx88g8w0hOuMYx-wuI5GasZtrjHUW0TRJHuQk4-_7snFUYAhH_gR6yt70LaErwFlfaO/exec')" class="w-full py-3.5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl font-bold text-sm transition flex items-center justify-center gap-2 shadow-lg">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
-                    Log Pergerakan
+            <div class="w-full space-y-3.5">
+                
+                <!-- TOMBOL 1: Log Pergerakan -->
+                <button onclick="bukaLayanan('https://script.google.com/macros/s/AKfycbx88g8w0hOuMYx-wuI5GasZtrjHUW0TRJHuQk4-_7snFUYAhH_gR6yt70LaErwFlfaO/exec')" class="menu-btn w-full p-4 rounded-2xl flex items-center justify-between group">
+                    <div class="flex items-center gap-4">
+                        <div class="icon-circle w-12 h-12 rounded-xl flex items-center justify-center text-indigo-400 group-hover:text-indigo-300 transition-colors">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
+                        </div>
+                        <div class="text-left">
+                            <span class="block text-sm font-bold text-slate-100 mb-0.5 group-hover:text-white transition-colors">Log Pergerakan</span>
+                            <span class="block text-[10px] text-slate-400">Presensi IB, Pesiar, & OJT</span>
+                        </div>
+                    </div>
+                    <svg class="w-5 h-5 text-slate-500 group-hover:text-indigo-400 transition-colors transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
                 </button>
 
-                <!-- Ganti link_gas_gedung dengan URL Web App Gedung Anda nantinya -->
-                <button onclick="bukaLayanan('https://script.google.com/macros/s/AKfycbzKqAZLF4CCSWAAjOFfALUeVmwkHfG9fglWyx0RZuppxtaxTwsi59KA9YYOzNfx4fuj/exec')" class="w-full py-3.5 bg-[#1e293b] hover:bg-[#334155] border border-slate-600 text-slate-200 rounded-xl font-bold text-sm transition flex items-center justify-center gap-2 shadow-lg">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5m3 0h1m-1-4h.01M9 16h.01M9 12h.01M9 8h.01M15 16h.01M15 12h.01M15 8h.01"></path></svg>
-                    Peminjaman Gedung
+                <!-- TOMBOL 2: Peminjaman Gedung -->
+                <button onclick="bukaLayanan('https://script.google.com/macros/s/AKfycbzKqAZLF4CCSWAAjOFfALUeVmwkHfG9fglWyx0RZuppxtaxTwsi59KA9YYOzNfx4fuj/exec')" class="menu-btn w-full p-4 rounded-2xl flex items-center justify-between group">
+                    <div class="flex items-center gap-4">
+                        <div class="icon-circle w-12 h-12 rounded-xl flex items-center justify-center text-emerald-400 group-hover:text-emerald-300 transition-colors">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5m3 0h1m-1-4h.01M9 16h.01M9 12h.01M9 8h.01M15 16h.01M15 12h.01M15 8h.01"></path></svg>
+                        </div>
+                        <div class="text-left">
+                            <span class="block text-sm font-bold text-slate-100 mb-0.5 group-hover:text-white transition-colors">Log Gedung</span>
+                            <span class="block text-[10px] text-slate-400">SAMS, GSG, & Auditorium</span>
+                        </div>
+                    </div>
+                    <svg class="w-5 h-5 text-slate-500 group-hover:text-emerald-400 transition-colors transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
                 </button>
 
-                <!-- Ganti link_gas_kendaraan dengan URL Web App Kendaraan Anda nantinya -->
-                <button onclick="bukaLayanan('link_gas_kendaraan_disini')" class="w-full py-3.5 bg-[#1e293b] hover:bg-[#334155] border border-slate-600 text-slate-200 rounded-xl font-bold text-sm transition flex items-center justify-center gap-2 shadow-lg">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"></path></svg>
-                    Peminjaman Kendaraan
+                <!-- TOMBOL 3: Peminjaman Kendaraan (Belum Aktif) -->
+                <button onclick="bukaLayanan('')" class="menu-btn w-full p-4 rounded-2xl flex items-center justify-between group opacity-75">
+                    <div class="flex items-center gap-4">
+                        <div class="icon-circle w-12 h-12 rounded-xl flex items-center justify-center text-amber-400 group-hover:text-amber-300 transition-colors">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"></path></svg>
+                        </div>
+                        <div class="text-left">
+                            <span class="block text-sm font-bold text-slate-100 mb-0.5 group-hover:text-white transition-colors">Log Kendaraan</span>
+                            <span class="block text-[10px] text-amber-500 font-semibold bg-amber-500/10 px-1.5 py-0.5 rounded inline-block mt-0.5">Segera Hadir</span>
+                        </div>
+                    </div>
+                    <svg class="w-5 h-5 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
                 </button>
+
             </div>
+        </div>
+        
+        <div class="mt-8 text-center text-[10px] text-slate-500 font-semibold uppercase tracking-wider">
+            Korps Taruna • Internal
         </div>
     </div>
 
-    <!-- AREA IFRAME (Menampilkan aplikasi GAS) -->
+    <!-- AREA IFRAME -->
     <div id="iframeContainer">
         <iframe id="mainFrame" src="" allow="camera; microphone; geolocation"></iframe>
     </div>
 
     <!-- TOMBOL KEMBALI KE MENU -->
-    <button id="btnKembaliMenu" onclick="tutupLayanan()">✕ Kembali Menu</button>
+    <button id="btnKembaliMenu" onclick="tutupLayanan()">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+        TUTUP APLIKASI
+    </button>
 
     <script>
+        // Saat halaman pertama kali dimuat (atau di-refresh)
+        window.onload = function() {
+            // Cek apakah ada URL tersimpan di memori HP
+            const savedUrl = localStorage.getItem('aktifAppUrl');
+            
+            if (savedUrl) {
+                // Jika ada, langsung buka iframe tanpa klik
+                bukaLayananInti(savedUrl);
+            }
+        };
+
         function bukaLayanan(urlAplikasi) {
-            if(!urlAplikasi || urlAplikasi.includes("link_gas")) {
-                alert("Layanan ini belum tersedia.");
+            if(!urlAplikasi) {
+                Swal.fire({
+                    toast: true, position: 'bottom', icon: 'info', title: 'Layanan sedang dalam tahap pengembangan.',
+                    showConfirmButton: false, timer: 2000, background: '#1e293b', color: '#f8fafc'
+                });
                 return;
             }
-            // Sembunyikan menu, tampilkan iframe
-            document.getElementById('halamanMenu').style.display = 'none';
-            document.getElementById('iframeContainer').style.display = 'block';
-            document.getElementById('btnKembaliMenu').style.display = 'block';
             
-            // Masukkan URL ke iframe
-            document.getElementById('mainFrame').src = urlAplikasi;
+            // Simpan URL ke memori HP agar kebal refresh
+            localStorage.setItem('aktifAppUrl', urlAplikasi);
+            bukaLayananInti(urlAplikasi);
+        }
+
+        // Fungsi Inti untuk mengeksekusi perpindahan UI
+        function bukaLayananInti(url) {
+            document.getElementById('halamanMenu').style.display = 'none';
+            
+            const iframe = document.getElementById('mainFrame');
+            // Hanya ganti src jika belum sama (menghindari load ulang saat refresh)
+            if(iframe.src !== url) {
+                iframe.src = url;
+            }
+            
+            document.getElementById('iframeContainer').style.display = 'block';
+            document.getElementById('btnKembaliMenu').style.display = 'flex'; // Pakai flex agar icon dan teks rapi
         }
 
         function tutupLayanan() {
-            // Kosongkan iframe agar proses GAS berhenti
-            document.getElementById('mainFrame').src = "";
-            
-            // Sembunyikan iframe, tampilkan menu kembali
-            document.getElementById('iframeContainer').style.display = 'none';
-            document.getElementById('btnKembaliMenu').style.display = 'none';
-            document.getElementById('halamanMenu').style.display = 'flex';
+            // Konfirmasi ringan agar tidak tertekan tak sengaja
+            Swal.fire({
+                title: 'Tutup Aplikasi?',
+                text: "Anda akan kembali ke Portal Utama.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#1e293b',
+                confirmButtonText: 'Ya, Tutup',
+                cancelButtonText: 'Batal',
+                background: '#0f172a',
+                color: '#f8fafc'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Hapus jejak URL dari memori HP
+                    localStorage.removeItem('aktifAppUrl');
+                    
+                    // Matikan koneksi iframe
+                    document.getElementById('mainFrame').src = "";
+                    
+                    // Kembalikan tampilan
+                    document.getElementById('iframeContainer').style.display = 'none';
+                    document.getElementById('btnKembaliMenu').style.display = 'none';
+                    document.getElementById('halamanMenu').style.display = 'flex';
+                }
+            });
         }
     </script>
 </body>
