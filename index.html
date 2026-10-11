@@ -5,9 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Portal Sistem Informasi - Politeknik Penerbangan Indonesia Curug</title>
     
+    <!-- Favicon / Logo Web pada Tab Browser -->
     <link rel="icon" type="image/png" href="https://lh3.googleusercontent.com/d/1aC-xXpYi5bPon4N5biyockuXwTDcy8Pu">
+    
+    <!-- Preconnect untuk mempercepat render -->
     <link rel="preconnect" href="https://script.google.com">
     <link rel="preconnect" href="https://lh3.googleusercontent.com">
+    
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
     
@@ -20,6 +24,7 @@
             color: #f8fafc;
         }
 
+        /* Latar Belakang Asli */
         .bg-custom-overlay {
             position: fixed;
             top: 0; left: 0; width: 100vw; height: 100vh;
@@ -30,6 +35,7 @@
             background-repeat: no-repeat;
         }
 
+        /* Lapisan gelap transparan */
         .bg-dark-overlay {
             position: fixed;
             top: 0; left: 0; width: 100vw; height: 100vh;
@@ -37,6 +43,7 @@
             background-color: rgba(2, 6, 23, 0.75); 
         }
 
+        /* Glassmorphism Premium */
         .glass-panel {
             background: rgba(15, 23, 42, 0.65);
             backdrop-filter: blur(16px);
@@ -45,6 +52,7 @@
             box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
         }
 
+        /* Tombol Modern */
         .btn-modern {
             background: rgba(255, 255, 255, 0.03);
             border: 1px solid rgba(255, 255, 255, 0.05);
@@ -59,6 +67,7 @@
             transform: translateY(1px);
         }
 
+        /* Spinner Futuristik */
         .spinner-container {
             position: relative;
             width: 50px;
@@ -169,7 +178,7 @@
     <!-- AREA APLIKASI (Iframe) -->
     <div id="layarAplikasi" class="hidden fixed inset-0 z-40 w-full h-full bg-transparent">
         <!-- SPINNER LOADING -->
-        <div id="loadingOverlay" class="absolute inset-0 z-50 flex items-center justify-center bg-[#020617]/70 backdrop-blur-md transition-opacity duration-700 opacity-100 pointer-events-none">
+        <div id="loadingOverlay" class="absolute inset-0 z-50 flex items-center justify-center bg-[#020617]/50 backdrop-blur-sm transition-opacity duration-700 opacity-100 pointer-events-none">
             <div class="glass-panel p-6 rounded-full flex items-center justify-center shadow-[0_0_40px_rgba(99,102,241,0.15)] border border-white/10 transform scale-110">
                 <div class="spinner-container">
                     <div class="spinner-ring"></div>
@@ -200,7 +209,6 @@
             if (!daftarAplikasi[idLayanan]) return;
             if (deteksiBrowserInternal()) return;
 
-            // HANYA MENGUBAH URL HASH, MURNI IFRAME, TIDAK ADA REDIRECT!
             window.location.hash = idLayanan; 
         }
 
@@ -223,13 +231,16 @@
                     
                     const iframe = document.createElement('iframe');
                     iframe.setAttribute('allow', 'camera; microphone; geolocation');
-                    iframe.style.width = '100%';
-                    iframe.style.height = '100%';
-                    iframe.style.border = 'none';
-                    iframe.style.background = 'transparent';
+                    // Tambahkan class opacity-0 agar iframe tak kasatmata selama merender halaman putih google
+                    iframe.className = 'w-full h-full border-none bg-transparent transition-opacity duration-700 opacity-0';
                     
                     setTimeout(() => {
                         iframe.onload = function() {
+                            // Halaman sudah siap, munculkan iframe secara perlahan
+                            iframe.classList.remove('opacity-0');
+                            iframe.classList.add('opacity-100');
+                            
+                            // Sembunyikan efek loading glassmorphism
                             loadingOverlay.classList.remove('opacity-100');
                             loadingOverlay.classList.add('opacity-0');
                         };
@@ -239,6 +250,12 @@
                     wrapper.appendChild(iframe);
                     wrapper.dataset.current = idLayanan;
                 } else {
+                    // Jika iframe sudah pernah dimuat (kembali dari menu utama)
+                    const existingIframe = wrapper.querySelector('iframe');
+                    if(existingIframe) {
+                        existingIframe.classList.remove('opacity-0');
+                        existingIframe.classList.add('opacity-100');
+                    }
                     setTimeout(() => {
                         loadingOverlay.classList.remove('opacity-100');
                         loadingOverlay.classList.add('opacity-0');
