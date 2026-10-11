@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Portal Sistem Informasi - PPI Curug</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
+    <style>
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: #0e121e; 
+            margin: 0; padding: 0;
+            overflow: hidden; /* Mengunci scroll */
+        }
+        
+        /* Container iframe (Awalnya tersembunyi) */
+        #iframeContainer {
+            display: none;
+            width: 100vw;
+            height: 100vh;
+            position: fixed;
+            top: 0; left: 0;
+            z-index: 50;
+        }
+        
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        /* Tombol Kembali ke Menu (Melayang di atas iframe) */
+        #btnKembaliMenu {
+            display: none;
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 100;
+            background-color: #ef4444; /* Warna Merah (Rose-500) */
+            color: white;
+            padding: 8px 16px;
+            border-radius: 9999px;
+            font-size: 12px;
+            font-weight: bold;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            border: 1px solid #7f1d1d;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body class="text-slate-200">
+
+    <!-- HALAMAN MENU UTAMA -->
+    <div id="halamanMenu" class="min-h-screen flex flex-col items-center justify-center p-6 bg-[#0e121e] relative overflow-hidden">
+        <!-- Background Ornamen -->
+        <div class="absolute inset-0 z-0 opacity-20" style="background-image: url('https://lh3.googleusercontent.com/d/1I4uQ32h1LN7V1A7NMliGZmw2utljBUXj'); background-size: cover; background-position: center; filter: blur(4px);"></div>
+        
+        <div class="z-10 bg-[#181d30]/80 backdrop-blur-md border border-slate-700/60 p-8 rounded-3xl shadow-2xl w-full max-w-sm text-center">
+            <div class="w-16 h-16 mx-auto bg-indigo-500/20 border border-indigo-400/30 rounded-2xl flex items-center justify-center mb-4">
+                <img src="https://lh3.googleusercontent.com/d/1aC-xXpYi5bPon4N5biyockuXwTDcy8Pu" alt="Logo" class="h-10 w-auto">
+            </div>
+            <h1 class="text-lg font-bold text-white tracking-wide uppercase mb-1">Portal Digital</h1>
+            <p class="text-xs text-slate-400 mb-8">Politeknik Penerbangan Indonesia Curug</p>
+
+            <div class="space-y-4">
+                <!-- Ganti link_gas_pergerakan dengan URL Web App Pergerakan Anda -->
+                <button onclick="bukaLayanan('https://script.google.com/macros/s/AKfycbx88g8w0hOuMYx-wuI5GasZtrjHUW0TRJHuQk4-_7snFUYAhH_gR6yt70LaErwFlfaO/exec')" class="w-full py-3.5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl font-bold text-sm transition flex items-center justify-center gap-2 shadow-lg">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
+                    Log Pergerakan
+                </button>
+
+                <!-- Ganti link_gas_gedung dengan URL Web App Gedung Anda nantinya -->
+                <button onclick="bukaLayanan('https://script.google.com/macros/s/AKfycbzKqAZLF4CCSWAAjOFfALUeVmwkHfG9fglWyx0RZuppxtaxTwsi59KA9YYOzNfx4fuj/exec')" class="w-full py-3.5 bg-[#1e293b] hover:bg-[#334155] border border-slate-600 text-slate-200 rounded-xl font-bold text-sm transition flex items-center justify-center gap-2 shadow-lg">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5m3 0h1m-1-4h.01M9 16h.01M9 12h.01M9 8h.01M15 16h.01M15 12h.01M15 8h.01"></path></svg>
+                    Peminjaman Gedung
+                </button>
+
+                <!-- Ganti link_gas_kendaraan dengan URL Web App Kendaraan Anda nantinya -->
+                <button onclick="bukaLayanan('link_gas_kendaraan_disini')" class="w-full py-3.5 bg-[#1e293b] hover:bg-[#334155] border border-slate-600 text-slate-200 rounded-xl font-bold text-sm transition flex items-center justify-center gap-2 shadow-lg">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"></path></svg>
+                    Peminjaman Kendaraan
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- AREA IFRAME (Menampilkan aplikasi GAS) -->
+    <div id="iframeContainer">
+        <iframe id="mainFrame" src="" allow="camera; microphone; geolocation"></iframe>
+    </div>
+
+    <!-- TOMBOL KEMBALI KE MENU -->
+    <button id="btnKembaliMenu" onclick="tutupLayanan()">✕ Kembali Menu</button>
+
+    <script>
+        function bukaLayanan(urlAplikasi) {
+            if(!urlAplikasi || urlAplikasi.includes("link_gas")) {
+                alert("Layanan ini belum tersedia.");
+                return;
+            }
+            // Sembunyikan menu, tampilkan iframe
+            document.getElementById('halamanMenu').style.display = 'none';
+            document.getElementById('iframeContainer').style.display = 'block';
+            document.getElementById('btnKembaliMenu').style.display = 'block';
+            
+            // Masukkan URL ke iframe
+            document.getElementById('mainFrame').src = urlAplikasi;
+        }
+
+        function tutupLayanan() {
+            // Kosongkan iframe agar proses GAS berhenti
+            document.getElementById('mainFrame').src = "";
+            
+            // Sembunyikan iframe, tampilkan menu kembali
+            document.getElementById('iframeContainer').style.display = 'none';
+            document.getElementById('btnKembaliMenu').style.display = 'none';
+            document.getElementById('halamanMenu').style.display = 'flex';
+        }
+    </script>
+</body>
+</html>
