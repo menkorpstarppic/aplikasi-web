@@ -5,13 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Portal Sistem Informasi - Politeknik Penerbangan Indonesia Curug</title>
     
-    <!-- Favicon / Logo Web pada Tab Browser -->
     <link rel="icon" type="image/png" href="https://lh3.googleusercontent.com/d/1aC-xXpYi5bPon4N5biyockuXwTDcy8Pu">
-    
-    <!-- Preconnect untuk mempercepat render -->
     <link rel="preconnect" href="https://script.google.com">
     <link rel="preconnect" href="https://lh3.googleusercontent.com">
-    
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
     
@@ -24,7 +20,6 @@
             color: #f8fafc;
         }
 
-        /* Latar Belakang Asli */
         .bg-custom-overlay {
             position: fixed;
             top: 0; left: 0; width: 100vw; height: 100vh;
@@ -35,7 +30,6 @@
             background-repeat: no-repeat;
         }
 
-        /* Lapisan gelap transparan */
         .bg-dark-overlay {
             position: fixed;
             top: 0; left: 0; width: 100vw; height: 100vh;
@@ -43,7 +37,6 @@
             background-color: rgba(2, 6, 23, 0.75); 
         }
 
-        /* Glassmorphism Premium */
         .glass-panel {
             background: rgba(15, 23, 42, 0.65);
             backdrop-filter: blur(16px);
@@ -52,7 +45,6 @@
             box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
         }
 
-        /* Tombol Modern */
         .btn-modern {
             background: rgba(255, 255, 255, 0.03);
             border: 1px solid rgba(255, 255, 255, 0.05);
@@ -67,7 +59,6 @@
             transform: translateY(1px);
         }
 
-        /* Spinner Futuristik */
         .spinner-container {
             position: relative;
             width: 50px;
@@ -98,7 +89,7 @@
     <div class="bg-custom-overlay"></div>
     <div class="bg-dark-overlay"></div>
 
-    <!-- MODAL PERINGATAN BROWSER WHATSAPP/IN-APP -->
+    <!-- MODAL PERINGATAN BROWSER WHATSAPP -->
     <div id="inAppWarning" class="hidden fixed inset-0 z-[100] flex items-center justify-center bg-[#020617]/90 backdrop-blur-md p-6">
         <div class="glass-panel p-8 rounded-3xl w-full max-w-sm flex flex-col items-center text-center shadow-2xl border border-rose-500/30">
             <div class="w-16 h-16 bg-rose-500/20 text-rose-500 rounded-full flex items-center justify-center mb-5 border border-rose-500/30">
@@ -123,7 +114,6 @@
     <div id="halamanMenu" class="min-h-screen flex flex-col items-center justify-center p-6 relative z-10 w-full transition-opacity duration-300">
         <div class="glass-panel p-8 rounded-3xl w-full max-w-sm flex flex-col items-center">
             
-            <!-- Logo -->
             <div class="relative w-16 h-16 mb-5 group">
                 <div class="absolute inset-0 bg-indigo-500 rounded-full blur-xl opacity-20 group-hover:opacity-40 transition-opacity duration-500"></div>
                 <div class="relative w-full h-full bg-[#0f172a] border border-indigo-500/30 rounded-2xl flex items-center justify-center shadow-inner">
@@ -139,7 +129,6 @@
             </p>
 
             <div class="w-full space-y-3">
-                <!-- Tombol 1: Log Pergerakan -->
                 <button onclick="bukaLayanan('pergerakan')" class="btn-modern w-full p-4 rounded-2xl flex items-center gap-4 text-left group">
                     <div class="w-10 h-10 shrink-0 rounded-xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-indigo-400 group-hover:text-indigo-300 group-hover:scale-110 transition-all">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
@@ -149,7 +138,6 @@
                     </div>
                 </button>
 
-                <!-- Tombol 2: Log Peminjaman Gedung -->
                 <button onclick="bukaLayanan('gedung')" class="btn-modern w-full p-4 rounded-2xl flex items-center gap-4 text-left group">
                     <div class="w-10 h-10 shrink-0 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 group-hover:text-emerald-300 group-hover:scale-110 transition-all">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5m3 0h1m-1-4h.01M9 16h.01M9 12h.01M9 8h.01M15 16h.01M15 12h.01M15 8h.01"></path></svg>
@@ -159,8 +147,7 @@
                     </div>
                 </button>
 
-                <!-- Tombol 3: Log Peminjaman Kendaraan -->
-                <button onclick="bukaLayanan('kendaraan')" class="btn-modern w-full p-4 rounded-2xl flex items-center gap-4 text-left group opacity-60">
+                <button class="btn-modern w-full p-4 rounded-2xl flex items-center gap-4 text-left group opacity-60 cursor-default">
                     <div class="w-10 h-10 shrink-0 rounded-xl bg-slate-500/10 border border-slate-500/20 flex items-center justify-center text-slate-400 transition-all">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"></path></svg>
                     </div>
@@ -181,8 +168,8 @@
 
     <!-- AREA APLIKASI (Iframe) -->
     <div id="layarAplikasi" class="hidden fixed inset-0 z-40 w-full h-full bg-transparent">
-        <!-- LAYER SPINNER LOADING -->
-        <div id="loadingOverlay" class="absolute inset-0 z-50 flex items-center justify-center bg-[#020617]/70 backdrop-blur-md transition-opacity duration-700 opacity-100">
+        <!-- SPINNER LOADING -->
+        <div id="loadingOverlay" class="absolute inset-0 z-50 flex items-center justify-center bg-[#020617]/70 backdrop-blur-md transition-opacity duration-700 opacity-100 pointer-events-none">
             <div class="glass-panel p-6 rounded-full flex items-center justify-center shadow-[0_0_40px_rgba(99,102,241,0.15)] border border-white/10 transform scale-110">
                 <div class="spinner-container">
                     <div class="spinner-ring"></div>
@@ -200,7 +187,6 @@
             'gedung': 'https://script.google.com/macros/s/AKfycbwssleg1KigvT6ospk6LVwpea_78W2OuInzvV7GzbNmO9RfaanhQMo2wECICG8Mx8Dv/exec'
         };
 
-        // Deteksi aplikasi WhatsApp/Instagram/Line dsb
         function deteksiBrowserInternal() {
             const ua = navigator.userAgent || navigator.vendor || window.opera;
             if (/WhatsApp|Instagram|FBAN|FBAV|Line/i.test(ua)) {
@@ -212,11 +198,9 @@
 
         function bukaLayanan(idLayanan) {
             if (!daftarAplikasi[idLayanan]) return;
-
-            // Jika dibuka di WhatsApp, biarkan modal peringatan muncul, hentikan proses klik
             if (deteksiBrowserInternal()) return;
 
-            // Lanjut menggunakan animasi Iframe portal
+            // HANYA MENGUBAH URL HASH, MURNI IFRAME, TIDAK ADA REDIRECT!
             window.location.hash = idLayanan; 
         }
 
@@ -231,8 +215,8 @@
                 halamanMenu.classList.add('hidden');
                 layarAplikasi.classList.remove('hidden');
                 
-                loadingOverlay.classList.remove('opacity-0', 'pointer-events-none');
-                loadingOverlay.classList.add('opacity-100', 'pointer-events-auto');
+                loadingOverlay.classList.remove('opacity-0');
+                loadingOverlay.classList.add('opacity-100');
                 
                 if (wrapper.dataset.current !== idLayanan) {
                     wrapper.innerHTML = ''; 
@@ -248,10 +232,6 @@
                         iframe.onload = function() {
                             loadingOverlay.classList.remove('opacity-100');
                             loadingOverlay.classList.add('opacity-0');
-                            setTimeout(() => {
-                                loadingOverlay.classList.remove('pointer-events-auto');
-                                loadingOverlay.classList.add('pointer-events-none');
-                            }, 700);
                         };
                         iframe.src = daftarAplikasi[idLayanan];
                     }, 50);
@@ -262,19 +242,13 @@
                     setTimeout(() => {
                         loadingOverlay.classList.remove('opacity-100');
                         loadingOverlay.classList.add('opacity-0');
-                        setTimeout(() => {
-                            loadingOverlay.classList.remove('pointer-events-auto');
-                            loadingOverlay.classList.add('pointer-events-none');
-                        }, 700);
                     }, 400);
                 }
             } else {
                 layarAplikasi.classList.add('hidden');
                 halamanMenu.classList.remove('hidden');
-                
                 wrapper.innerHTML = '';
                 wrapper.dataset.current = '';
-                
                 if (window.location.hash !== '') {
                     history.replaceState(null, null, window.location.pathname + window.location.search);
                 }
