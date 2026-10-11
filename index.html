@@ -8,7 +8,7 @@
     <!-- Favicon / Logo Web pada Tab Browser -->
     <link rel="icon" type="image/png" href="https://lh3.googleusercontent.com/d/1aC-xXpYi5bPon4N5biyockuXwTDcy8Pu">
     
-    <!-- Preconnect untuk mempercepat render Iframe Google -->
+    <!-- Preconnect untuk mempercepat render -->
     <link rel="preconnect" href="https://script.google.com">
     <link rel="preconnect" href="https://lh3.googleusercontent.com">
     
@@ -67,54 +67,24 @@
             transform: translateY(1px);
         }
 
-        /* Container Layar Penuh */
-        #layarAplikasi {
-            display: none;
-            width: 100vw; height: 100vh;
-            position: fixed; top: 0; left: 0;
-            z-index: 50;
-            background-color: transparent;
-        }
-        
-        #iframeWrapper {
-            width: 100%; height: 100%;
-            position: relative;
-            z-index: 10;
-        }
-
-        /* Overlay Loading */
-        #loadingOverlay {
-            position: absolute;
-            inset: 0;
-            z-index: 20;
-            background-color: rgba(2, 6, 23, 0.7);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            transition: opacity 0.3s ease;
-        }
-
-        /* Spinner Futuristik */
+        /* Spinner Futuristik (Tanpa Teks) */
         .spinner-container {
             position: relative;
-            width: 60px;
-            height: 60px;
+            width: 50px;
+            height: 50px;
         }
         .spinner-ring {
             position: absolute;
             inset: 0;
-            border: 3px solid rgba(99, 102, 241, 0.2);
+            border: 3px solid rgba(99, 102, 241, 0.15);
             border-top-color: #6366f1;
             border-radius: 50%;
-            animation: spin 0.9s cubic-bezier(0.68, -0.55, 0.265, 1.55) infinite;
+            animation: spin 1s cubic-bezier(0.68, -0.55, 0.265, 1.55) infinite;
         }
         .spinner-ring-inner {
             position: absolute;
             inset: 8px;
-            border: 3px solid rgba(16, 185, 129, 0.2);
+            border: 3px solid rgba(16, 185, 129, 0.15);
             border-bottom-color: #10b981;
             border-radius: 50%;
             animation: spin-reverse 0.7s linear infinite;
@@ -129,7 +99,7 @@
     <div class="bg-dark-overlay"></div>
 
     <!-- HALAMAN MENU UTAMA -->
-    <div id="halamanMenu" class="min-h-screen flex flex-col items-center justify-center p-6 relative z-10 w-full">
+    <div id="halamanMenu" class="min-h-screen flex flex-col items-center justify-center p-6 relative z-10 w-full transition-opacity duration-300">
         <div class="glass-panel p-8 rounded-3xl w-full max-w-sm flex flex-col items-center">
             
             <!-- Logo -->
@@ -188,17 +158,20 @@
         </div>
     </div>
 
-    <!-- AREA APLIKASI (Iframe + Spinner Loading Visual) -->
-    <div id="layarAplikasi">
-        <div id="loadingOverlay">
-            <div class="glass-panel p-6 rounded-3xl flex items-center justify-center shadow-2xl border border-white/10">
+    <!-- AREA APLIKASI (Iframe) -->
+    <div id="layarAplikasi" class="hidden fixed inset-0 z-40 w-full h-full bg-transparent">
+        
+        <!-- LAYER SPINNER LOADING -->
+        <div id="loadingOverlay" class="absolute inset-0 z-50 flex items-center justify-center bg-[#020617]/70 backdrop-blur-md transition-opacity duration-700 opacity-100">
+            <div class="glass-panel p-6 rounded-full flex items-center justify-center shadow-[0_0_40px_rgba(99,102,241,0.15)] border border-white/10 transform scale-110">
                 <div class="spinner-container">
                     <div class="spinner-ring"></div>
                     <div class="spinner-ring-inner"></div>
                 </div>
             </div>
         </div>
-        <div id="iframeWrapper"></div>
+
+        <div id="iframeWrapper" class="relative w-full h-full z-10"></div>
     </div>
 
     <script>
@@ -215,10 +188,13 @@
             const loadingOverlay = document.getElementById('loadingOverlay');
             
             if (daftarAplikasi[idLayanan]) {
-                halamanMenu.style.display = 'none';
-                layarAplikasi.style.display = 'block';
-                loadingOverlay.style.opacity = '1';
-                loadingOverlay.style.pointerEvents = 'auto';
+                // Tampilkan container aplikasi dan sembunyikan menu
+                halamanMenu.classList.add('hidden');
+                layarAplikasi.classList.remove('hidden');
+                
+                // Pastikan loading muncul saat perpindahan
+                loadingOverlay.classList.remove('opacity-0', 'pointer-events-none');
+                loadingOverlay.classList.add('opacity-100', 'pointer-events-auto');
                 
                 if (wrapper.dataset.current !== idLayanan) {
                     wrapper.innerHTML = ''; 
@@ -230,27 +206,45 @@
                     iframe.style.border = 'none';
                     iframe.style.background = 'transparent';
                     
-                    iframe.onload = function() {
-                        loadingOverlay.style.opacity = '0';
-                        loadingOverlay.style.pointerEvents = 'none';
-                    };
+                    // Delay sejenak agar iframe.onload tidak terpicu oleh proses build elemen (about:blank)
+                    setTimeout(() => {
+                        iframe.onload = function() {
+                            // Sembunyikan loading dengan transisi halus
+                            loadingOverlay.classList.remove('opacity-100');
+                            loadingOverlay.classList.add('opacity-0');
+                            
+                            // Matikan klik pada overlay setelah memudar
+                            setTimeout(() => {
+                                loadingOverlay.classList.remove('pointer-events-auto');
+                                loadingOverlay.classList.add('pointer-events-none');
+                            }, 700);
+                        };
+                        iframe.src = daftarAplikasi[idLayanan];
+                    }, 50);
                     
                     wrapper.appendChild(iframe);
-                    iframe.contentWindow.location.replace(daftarAplikasi[idLayanan]);
                     wrapper.dataset.current = idLayanan;
                 } else {
+                    // Jika iframe sudah pernah dimuat (kembali dari menu)
                     setTimeout(() => {
-                        loadingOverlay.style.opacity = '0';
-                        loadingOverlay.style.pointerEvents = 'none';
-                    }, 300);
+                        loadingOverlay.classList.remove('opacity-100');
+                        loadingOverlay.classList.add('opacity-0');
+                        setTimeout(() => {
+                            loadingOverlay.classList.remove('pointer-events-auto');
+                            loadingOverlay.classList.add('pointer-events-none');
+                        }, 700);
+                    }, 400);
                 }
             } else {
-                layarAplikasi.style.display = 'none';
-                halamanMenu.style.display = 'flex';
+                // Kembali ke Halaman Utama
+                layarAplikasi.classList.add('hidden');
+                halamanMenu.classList.remove('hidden');
                 
+                // Hancurkan iframe untuk memori
                 wrapper.innerHTML = '';
                 wrapper.dataset.current = '';
                 
+                // Bersihkan URL Hash
                 if (window.location.hash !== '') {
                     history.replaceState(null, null, window.location.pathname + window.location.search);
                 }
@@ -258,10 +252,7 @@
         }
 
         window.addEventListener('hashchange', tanganiNavigasi);
-
-        window.onload = function() {
-            tanganiNavigasi();
-        };
+        window.onload = function() { tanganiNavigasi(); };
 
         function bukaLayanan(idLayanan) {
             if (!daftarAplikasi[idLayanan]) return;
