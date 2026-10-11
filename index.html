@@ -67,7 +67,7 @@
             transform: translateY(1px);
         }
 
-        /* Spinner Futuristik (Tanpa Teks) */
+        /* Spinner Futuristik */
         .spinner-container {
             position: relative;
             width: 50px;
@@ -97,6 +97,27 @@
 
     <div class="bg-custom-overlay"></div>
     <div class="bg-dark-overlay"></div>
+
+    <!-- MODAL PERINGATAN BROWSER WHATSAPP/IN-APP -->
+    <div id="inAppWarning" class="hidden fixed inset-0 z-[100] flex items-center justify-center bg-[#020617]/90 backdrop-blur-md p-6">
+        <div class="glass-panel p-8 rounded-3xl w-full max-w-sm flex flex-col items-center text-center shadow-2xl border border-rose-500/30">
+            <div class="w-16 h-16 bg-rose-500/20 text-rose-500 rounded-full flex items-center justify-center mb-5 border border-rose-500/30">
+                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+            </div>
+            <h2 class="text-lg font-bold text-slate-100 mb-2">Buka di Browser Utama!</h2>
+            <p class="text-[11px] text-slate-300 mb-5 leading-relaxed">
+                Sistem mendeteksi Anda membuka portal melalui WhatsApp atau aplikasi lain. <br>
+                <strong class="text-rose-400">Lokasi GPS akan diblokir otomatis oleh aplikasi ini.</strong>
+            </p>
+            <div class="bg-slate-800/50 p-4 rounded-xl border border-slate-700/50 w-full text-left">
+                <p class="text-[10px] text-slate-300 mb-2 font-semibold">Cara memperbaiki:</p>
+                <ol class="text-[10px] text-slate-400 list-decimal pl-4 space-y-1">
+                    <li>Ketuk ikon <strong class="text-white">tiga titik (...)</strong> atau <strong class="text-white">Safari/Kompas</strong> di sudut layar.</li>
+                    <li>Pilih menu <strong class="text-white">"Buka di Safari"</strong> atau <strong class="text-white">"Buka di Chrome"</strong>.</li>
+                </ol>
+            </div>
+        </div>
+    </div>
 
     <!-- HALAMAN MENU UTAMA -->
     <div id="halamanMenu" class="min-h-screen flex flex-col items-center justify-center p-6 relative z-10 w-full transition-opacity duration-300">
@@ -179,21 +200,23 @@
             'gedung': 'https://script.google.com/macros/s/AKfycbwssleg1KigvT6ospk6LVwpea_78W2OuInzvV7GzbNmO9RfaanhQMo2wECICG8Mx8Dv/exec'
         };
 
-        // KUNCI SOLUSI IPHONE: Fungsi deteksi perangkat pintar
+        // Deteksi aplikasi WhatsApp/Instagram/Line dsb
+        function deteksiBrowserInternal() {
+            const ua = navigator.userAgent || navigator.vendor || window.opera;
+            if (/WhatsApp|Instagram|FBAN|FBAV|Line/i.test(ua)) {
+                document.getElementById('inAppWarning').classList.remove('hidden');
+                return true;
+            }
+            return false;
+        }
+
         function bukaLayanan(idLayanan) {
             if (!daftarAplikasi[idLayanan]) return;
 
-            // Cek apakah perangkat adalah iPhone/iPad (iOS)
-            const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+            // Jika dibuka di WhatsApp, biarkan modal peringatan muncul, hentikan proses klik
+            if (deteksiBrowserInternal()) return;
 
-            // Jika pengguna pakai iPhone DAN membuka Log Pergerakan (yang butuh izin lokasi GPS)
-            if (isIOS && idLayanan === 'pergerakan') {
-                // Lewati iframe dan langsung redirect ke link asli agar GPS tidak di-blokir Apple
-                window.location.href = daftarAplikasi[idLayanan];
-                return;
-            }
-
-            // Untuk Android, PC, atau buka Log Gedung: Lanjut menggunakan animasi Iframe portal
+            // Lanjut menggunakan animasi Iframe portal
             window.location.hash = idLayanan; 
         }
 
@@ -259,7 +282,10 @@
         }
 
         window.addEventListener('hashchange', tanganiNavigasi);
-        window.onload = function() { tanganiNavigasi(); };
+        window.onload = function() { 
+            deteksiBrowserInternal();
+            tanganiNavigasi(); 
+        };
     </script>
 </body>
 </html>
