@@ -156,13 +156,12 @@
                     </div>
                 </button>
 
-                <button class="btn-modern w-full p-4 rounded-2xl flex items-center gap-4 text-left group opacity-60 cursor-default">
-                    <div class="w-10 h-10 shrink-0 rounded-xl bg-slate-500/10 border border-slate-500/20 flex items-center justify-center text-slate-400 transition-all">
+                <button onclick="bukaLayanan('kendaraan')" class="btn-modern w-full p-4 rounded-2xl flex items-center gap-4 text-left group">
+                    <div class="w-10 h-10 shrink-0 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-400 group-hover:text-amber-300 group-hover:scale-110 transition-all">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"></path></svg>
                     </div>
                     <div>
                         <span class="block text-sm font-bold text-slate-200 leading-tight">Log Peminjaman<br>Kendaraan</span>
-                        <span class="inline-block text-[9px] text-slate-900 bg-amber-400 font-bold px-1.5 py-0.5 rounded mt-1">COMING SOON</span>
                     </div>
                 </button>
             </div>
@@ -193,7 +192,8 @@
     <script>
         const daftarAplikasi = {
             'pergerakan': 'https://script.google.com/macros/s/AKfycbwmnbSkQp2i5jY6hEstu5KHcwFv7Tgn3wN19jT-a5DvGQlyBmb20VqY1IfVnb-Vbv4/exec',
-            'gedung': 'https://script.google.com/macros/s/AKfycbyVJ0bOzLsZp7uLKsJyVba3e65buoM1xgqMWoqGJVjXGszvbbR295dmflw87lj9EOO6/exec'
+            'gedung': 'https://script.google.com/macros/s/AKfycbyVJ0bOzLsZp7uLKsJyVba3e65buoM1xgqMWoqGJVjXGszvbbR295dmflw87lj9EOO6/exec',
+            'kendaraan': 'https://script.google.com/macros/s/AKfycbxsbsuKwe1CWtKOW9iJa-K310Nj5H0WiPBja7hfW2Bcebiz8jo6z4WvTgjNSXFajbn5JA/exec'
         };
 
         function deteksiBrowserInternal() {
@@ -231,16 +231,13 @@
                     
                     const iframe = document.createElement('iframe');
                     iframe.setAttribute('allow', 'camera; microphone; geolocation');
-                    // Tambahkan class opacity-0 agar iframe tak kasatmata selama merender halaman putih google
                     iframe.className = 'w-full h-full border-none bg-transparent transition-opacity duration-700 opacity-0';
                     
                     setTimeout(() => {
                         iframe.onload = function() {
-                            // Halaman sudah siap, munculkan iframe secara perlahan
                             iframe.classList.remove('opacity-0');
                             iframe.classList.add('opacity-100');
                             
-                            // Sembunyikan efek loading glassmorphism
                             loadingOverlay.classList.remove('opacity-100');
                             loadingOverlay.classList.add('opacity-0');
                         };
@@ -250,7 +247,6 @@
                     wrapper.appendChild(iframe);
                     wrapper.dataset.current = idLayanan;
                 } else {
-                    // Jika iframe sudah pernah dimuat (kembali dari menu utama)
                     const existingIframe = wrapper.querySelector('iframe');
                     if(existingIframe) {
                         existingIframe.classList.remove('opacity-0');
